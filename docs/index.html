@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#191b19">
+  <meta name="description" content="A little seasonal surprise. Press the button and listen nearby.">
+  <title>A little seasonal magic</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body data-season="halloween">
+  <main>
+    <div class="eyebrow"><span class="tiny-star" aria-hidden="true">✦</span> A LITTLE SEASONAL MAGIC</div>
+    <div class="art" aria-hidden="true">
+      <div class="orbit"></div><span class="spark one">✦</span><span class="spark two">✧</span>
+      <svg class="ghost" viewBox="0 0 180 200" fill="none">
+        <path d="M32 174V83C32 46 56 23 90 23s58 23 58 60v91l-22-15-18 15-18-15-18 15-18-15-22 15Z" fill="currentColor"/>
+        <ellipse cx="71" cy="91" rx="7" ry="12" fill="#191b19"/>
+        <ellipse cx="110" cy="91" rx="7" ry="12" fill="#191b19"/>
+        <ellipse cx="91" cy="120" rx="9" ry="11" fill="#191b19"/>
+      </svg>
+      <span class="season-symbol" id="symbol">✦</span>
+    </div>
+    <p class="occasion" id="occasion">HALLOWEEN AT THE HOUSE</p>
+    <h1 id="headline">Something’s<br>stirring.</h1>
+    <p class="intro" id="intro">A little surprise is waiting.<br>Press once, then listen nearby.</p>
+    <button id="play" type="button" disabled><span id="button-label">Connecting…</span><span aria-hidden="true">↗</span></button>
+    <p class="status" id="status" role="status" aria-live="polite">Checking whether the show is ready…</p>
+    <footer>ONE BUTTON. A LITTLE WONDER.</footer>
+    <noscript>Please enable JavaScript to use the sound button.</noscript>
+  </main>
+</body>
+</html>
