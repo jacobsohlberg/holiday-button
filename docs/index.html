@@ -3,32 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#191b19">
-  <meta name="description" content="A little seasonal surprise. Press the button and listen nearby.">
-  <title>A little seasonal magic</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#f7f4ed">
+  <meta name="description" content="Press for a festivity-appropriate sound. Thanksgiving turkey sounds, available daily 08:00–22:00 Swedish time.">
+  <title>Thanksgiving sounds</title>
+  <link rel="stylesheet" href="style.css?v=thanksgiving-3">
   <script src="config.js" defer></script>
-  <script src="app.js" defer></script>
+  <script src="app.js?v=thanksgiving-3" defer></script>
 </head>
-<body data-season="halloween">
+<body data-season="thanksgiving">
   <main>
-    <div class="eyebrow"><span class="tiny-star" aria-hidden="true">✦</span> A LITTLE SEASONAL MAGIC</div>
     <div class="art" aria-hidden="true">
-      <div class="orbit"></div><span class="spark one">✦</span><span class="spark two">✧</span>
-      <svg class="ghost" viewBox="0 0 180 200" fill="none">
-        <path d="M32 174V83C32 46 56 23 90 23s58 23 58 60v91l-22-15-18 15-18-15-18 15-18-15-22 15Z" fill="currentColor"/>
-        <ellipse cx="71" cy="91" rx="7" ry="12" fill="#191b19"/>
-        <ellipse cx="110" cy="91" rx="7" ry="12" fill="#191b19"/>
-        <ellipse cx="91" cy="120" rx="9" ry="11" fill="#191b19"/>
+      <svg class="turkey" viewBox="0 0 240 180" fill="none">
+        <path class="tail" d="M101 132C72 132 37 113 22 93c-9-12-4-22 9-21-13-15-10-29 4-29-6-20 4-30 18-22 3-20 18-24 29-9 12-14 27-7 27 10 16-6 26 5 20 21 18 3 23 18 10 30l-38 59Z"/>
+        <path class="feathers" d="m30 82 64 37M37 49l61 66M57 26l45 85M82 17l23 91m4-78-1 78m19-56-17 58"/>
+        <path class="legs" d="m112 139-4 24m32-25-2 25m-30 0-12 5m12-5 11 5m19-5-10 5m10-5 13 4"/>
+        <path class="body" d="M70 112c3-24 30-34 55-23 16 7 25 14 34 5 7-7 7-23 7-36 0-13 8-23 20-23 11 0 18 8 18 17 0 8-6 13-14 14-8 18-1 30-7 49-8 25-28 34-56 34-30 0-55-12-57-37Z"/>
+        <path class="wing" d="M85 106c19-8 39 0 56 17-23 9-46 4-56-17Z"/>
+        <path class="beak" d="m202 47 15 7-17 4Z"/>
+        <path class="wattle" d="M190 62c10 8 10 23 3 25-7 2-9-5-7-12l4-13Z"/>
+        <circle cx="191" cy="47" r="2.3" fill="var(--bg)"/>
       </svg>
-      <span class="season-symbol" id="symbol">✦</span>
+      <span class="season-symbol" id="symbol">❧</span>
     </div>
-    <p class="occasion" id="occasion">HALLOWEEN AT THE HOUSE</p>
-    <h1 id="headline">Something’s<br>stirring.</h1>
-    <p class="intro" id="intro">A little surprise is waiting.<br>Press once, then listen nearby.</p>
-    <button id="play" type="button" disabled><span id="button-label">Connecting…</span><span aria-hidden="true">↗</span></button>
-    <p class="status" id="status" role="status" aria-live="polite">Checking whether the show is ready…</p>
-    <footer>ONE BUTTON. A LITTLE WONDER.</footer>
+    <h1 id="headline">Thanksgiving</h1>
+    <p class="intro" id="intro">Press for a festivity-appropriate sound.<br>Listen nearby.</p>
+    <button id="play" type="button" disabled aria-describedby="hours status">
+      <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.8a1 1 0 0 1 1.5-.86l12 7.2a1 1 0 0 1 0 1.72l-12 7.2A1 1 0 0 1 7 19.2Z" fill="currentColor"/></svg>
+      <span id="button-label">Connecting…</span>
+    </button>
+    <p class="hours" id="hours">Daily <strong>08:00–22:00</strong><span class="hours-zone">Swedish time</span></p>
+    <p class="status" id="status" role="status" aria-live="polite">Checking whether the sound is ready…</p>
     <noscript>Please enable JavaScript to use the sound button.</noscript>
   </main>
 </body>

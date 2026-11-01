@@ -1,21 +1,21 @@
 const $ = (id) => document.getElementById(id);
 const themes = {
-  halloween: { occasion: "HALLOWEEN AT THE HOUSE", title: "Something’s\nstirring.", button: "Wake the ghosts", symbol: "✦" },
-  thanksgiving: { occasion: "A MOMENT OF GRATITUDE", title: "A little\nthank you.", button: "Play a little gratitude", symbol: "❧" },
-  christmas: { occasion: "CHRISTMAS AT THE HOUSE", title: "Hear a little\nChristmas.", button: "Let it ring", symbol: "✧" },
+  halloween: { title: "Halloween", button: "Play Halloween sound", symbol: "🎃" },
+  thanksgiving: { title: "Thanksgiving", button: "Play turkey sounds", symbol: "❧" },
+  christmas: { title: "Christmas", button: "Play Christmas sound", symbol: "✧" },
 };
 const api = (window.HOLIDAY_CONFIG?.apiBase || "").replace(/\/$/, "");
 const configured = (/^https:\/\//.test(api) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(api)) && !api.includes("YOUR-");
 let latestState = null, requestPending = false, ownJob = null, statusVersion = 0;
-let cooldownEnd = 0, statusFetchedAt = 0;
+let cooldownEnd = 0, statusFetchedAt = 0, statusFetchedMonotonic = 0;
 
 function themeFor(state) {
-  const name = Object.hasOwn(themes, state.season) ? state.season : "halloween";
+  const name = Object.hasOwn(themes, state.season) ? state.season : "thanksgiving";
   const theme = themes[name];
   document.body.dataset.season = name;
-  $("occasion").textContent = theme.occasion;
   $("headline").replaceChildren(...theme.title.split("\n").flatMap((part, i) => i ? [document.createElement("br"), part] : [part]));
   $("symbol").textContent = theme.symbol;
+  document.title = name === "thanksgiving" ? "Thanksgiving sounds" : "Sounds of the season";
   return theme;
 }
 
@@ -24,8 +24,13 @@ function render() {
   const state = latestState, theme = themeFor(state);
   const seconds = Math.max(0, Math.ceil((cooldownEnd - Date.now()) / 1000));
   const stale = Date.now() - statusFetchedAt > 20_000;
+  // Use the server clock, not the visitor's timezone or phone clock. Fail closed
+  // if an older relay has not yet supplied the opening-hours information.
+  const serverNow = (state.serverTime || 0) + performance.now() - statusFetchedMonotonic;
+  const hoursOpen = state.schedule?.open === true && serverNow < state.schedule.closesAt;
   let label = theme.button, message = "Ready when you are.";
   if (requestPending) { label = "Sending…"; message = "Asking the show to start…"; }
+  else if (!hoursOpen) { label = "Available from 08:00"; message = "Sounds are available daily, 08:00–22:00 Swedish time."; }
   else if (!state.enabled) { label = "Back soon"; message = "The show is taking a break."; }
   else if (stale || !state.online || !state.ready) { label = "Back soon"; message = "The show is offline. Please try again later."; }
   else if (state.busy) {
@@ -35,16 +40,17 @@ function render() {
     label = `Ready again in ${seconds}s`;
     message = ownJob && state.latest?.id === ownJob && ["failed", "expired"].includes(state.latest.status)
       ? "That sound couldn’t start. Please try again after the pause."
-      : "A short pause before the next little surprise.";
+      : "A short pause before the next seasonal sound.";
   }
   if ($("button-label").textContent !== label) $("button-label").textContent = label;
   if ($("status").textContent !== message) $("status").textContent = message;
-  $("play").disabled = requestPending || stale || !state.enabled || !state.online || !state.ready || state.busy || seconds > 0;
+  $("play").disabled = requestPending || stale || !hoursOpen || !state.enabled || !state.online || !state.ready || state.busy || seconds > 0;
 }
 
 function acceptState(state) {
   latestState = state;
   statusFetchedAt = Date.now();
+  statusFetchedMonotonic = performance.now();
   cooldownEnd = Date.now() + state.retryAfter * 1000;
   render();
 }
@@ -94,7 +100,7 @@ $("play").addEventListener("click", async () => {
 
 if (!configured) {
   $("button-label").textContent = "Coming soon";
-  $("status").textContent = "A little seasonal surprise is on its way.";
+  $("status").textContent = "Seasonal sounds will be available daily, 08:00–22:00 Swedish time.";
 } else {
   refresh();
   setInterval(refresh, 5000);
